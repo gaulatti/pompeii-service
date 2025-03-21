@@ -1,4 +1,9 @@
 import {
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+} from 'sequelize';
+import {
   BelongsTo,
   Column,
   DataType,
@@ -10,32 +15,35 @@ import { User } from './user.model';
 
 @Table({
   tableName: 'access_logs',
-  timestamps: true,
-  createdAt: 'timestamp',
-  updatedAt: false,
+  timestamps: false,
+  underscored: true,
 })
-export class AccessLog extends Model<AccessLog> {
+export class AccessLog extends Model<
+  InferAttributes<AccessLog>,
+  InferCreationAttributes<AccessLog>
+> {
   @Column({
     type: DataType.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   })
-  id: number;
+  id!: CreationOptional<number>;
 
   @ForeignKey(() => User)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
   })
-  user_id: number;
+  user_id!: number;
 
+  // We use the "timestamp" column to record when the access happened.
   @Column({
     type: DataType.DATE,
     allowNull: false,
     defaultValue: DataType.NOW,
   })
-  timestamp: Date;
+  timestamp!: Date;
 
   @BelongsTo(() => User)
-  user: User;
+  user?: User;
 }

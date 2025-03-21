@@ -1,4 +1,9 @@
 import {
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+} from 'sequelize';
+import {
   BelongsTo,
   Column,
   DataType,
@@ -14,41 +19,45 @@ import { User } from './user.model';
 @Table({
   tableName: 'memberships',
   timestamps: false,
+  underscored: true,
 })
-export class Membership extends Model<Membership> {
+export class Membership extends Model<
+  InferAttributes<Membership>,
+  InferCreationAttributes<Membership>
+> {
   @Column({
     type: DataType.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   })
-  id: number;
+  id!: CreationOptional<number>;
 
   @ForeignKey(() => User)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
   })
-  users_id: number;
+  users_id!: number;
 
   @ForeignKey(() => Team)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
   })
-  teams_id: number;
+  teams_id!: number;
 
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
   })
-  role: number;
+  role!: number;
 
   @BelongsTo(() => User)
-  user: User;
+  user?: User;
 
   @BelongsTo(() => Team)
-  team: Team;
+  team?: Team;
 
   @HasMany(() => Permission)
-  permissions: Permission[];
+  permissions?: Permission[];
 }

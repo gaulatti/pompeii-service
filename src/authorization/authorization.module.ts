@@ -3,6 +3,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { DalModule } from 'src/dal/dal.module';
 import { AuthorizationStrategy } from './authorization.strategy';
+import { UsersService } from './users/users.service';
+import { TeamsService } from './teams/teams.service';
 
 /**
  * The AuthorizationModule is responsible for handling authorization-related functionality.
@@ -26,7 +28,7 @@ import { AuthorizationStrategy } from './authorization.strategy';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({}),
   ],
-  providers: [AuthorizationStrategy],
-  exports: [AuthorizationStrategy],
+  providers: [AuthorizationStrategy, UsersService, TeamsService],
+  exports: [AuthorizationStrategy, UsersService, TeamsService],
 })
 export class AuthorizationModule {}

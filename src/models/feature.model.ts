@@ -1,4 +1,9 @@
 import {
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+} from 'sequelize';
+import {
   BelongsTo,
   Column,
   DataType,
@@ -13,46 +18,48 @@ import { Permission } from './permission.model';
 @Table({
   tableName: 'features',
   timestamps: true,
-  createdAt: 'created_at',
-  updatedAt: 'updated_at',
+  underscored: true,
 })
-export class Feature extends Model<Feature> {
+export class Feature extends Model<
+  InferAttributes<Feature>,
+  InferCreationAttributes<Feature>
+> {
   @Column({
     type: DataType.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   })
-  id: number;
+  id!: CreationOptional<number>;
 
   @ForeignKey(() => Application)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
   })
-  application_id: number;
+  application_id!: number;
 
   @Column({
     type: DataType.STRING(255),
     allowNull: false,
   })
-  name: string;
+  name!: string;
 
   @Column({
     type: DataType.STRING(255),
     allowNull: false,
     unique: true,
   })
-  slug: string;
+  slug!: string;
 
   @Column({
     type: DataType.TEXT,
     allowNull: true,
   })
-  description: string;
+  description?: string;
 
   @BelongsTo(() => Application)
-  application: Application;
+  application?: Application;
 
   @HasMany(() => Permission)
-  permissions: Permission[];
+  permissions?: Permission[];
 }

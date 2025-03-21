@@ -1,3 +1,8 @@
+import {
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+} from 'sequelize';
 import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
 import { Application } from './application.model';
 import { Membership } from './membership.model';
@@ -5,28 +10,29 @@ import { Membership } from './membership.model';
 @Table({
   tableName: 'teams',
   timestamps: true,
-  createdAt: 'created_at',
-  updatedAt: 'updated_at',
+  underscored: true,
   paranoid: true,
-  deletedAt: 'deleted_at',
 })
-export class Team extends Model<Team> {
+export class Team extends Model<
+  InferAttributes<Team>,
+  InferCreationAttributes<Team>
+> {
   @Column({
     type: DataType.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   })
-  id: number;
+  id!: CreationOptional<number>;
 
   @Column({
     type: DataType.STRING(255),
     allowNull: false,
   })
-  name: string;
+  name!: string;
 
   @HasMany(() => Membership)
-  memberships: Membership[];
+  memberships?: Membership[];
 
   @HasMany(() => Application)
-  applications: Application[];
+  applications?: Application[];
 }

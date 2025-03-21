@@ -1,4 +1,9 @@
 import {
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+} from 'sequelize';
+import {
   BelongsTo,
   Column,
   DataType,
@@ -9,43 +14,52 @@ import {
 import { Feature } from './feature.model';
 import { Membership } from './membership.model';
 
+export enum PermissionLevel {
+  C = 'C',
+  T1 = 'T1',
+  T2 = 'T2',
+  T3 = 'T3',
+}
+
 @Table({
   tableName: 'permissions',
   timestamps: true,
-  createdAt: 'created_at',
-  updatedAt: 'updated_at',
+  underscored: true,
 })
-export class Permission extends Model<Permission> {
+export class Permission extends Model<
+  InferAttributes<Permission>,
+  InferCreationAttributes<Permission>
+> {
   @Column({
     type: DataType.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   })
-  id: number;
+  id!: CreationOptional<number>;
 
   @ForeignKey(() => Feature)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
   })
-  feature_id: number;
+  feature_id!: number;
 
   @ForeignKey(() => Membership)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
   })
-  membership_id: number;
+  membership_id!: number;
 
   @Column({
-    type: DataType.ENUM('C', 'T1', 'T2', 'T3'),
+    type: DataType.ENUM(...Object.values(PermissionLevel)),
     allowNull: true,
   })
-  level: 'C' | 'T1' | 'T2' | 'T3';
+  level?: PermissionLevel;
 
   @BelongsTo(() => Feature)
-  feature: Feature;
+  feature?: Feature;
 
   @BelongsTo(() => Membership)
-  membership: Membership;
+  membership?: Membership;
 }

@@ -1,4 +1,9 @@
 import {
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+} from 'sequelize';
+import {
   BelongsTo,
   Column,
   DataType,
@@ -13,39 +18,41 @@ import { Team } from './team.model';
 @Table({
   tableName: 'applications',
   timestamps: true,
-  createdAt: 'created_at',
-  updatedAt: 'updated_at',
+  underscored: true,
 })
-export class Application extends Model<Application> {
+export class Application extends Model<
+  InferAttributes<Application>,
+  InferCreationAttributes<Application>
+> {
   @Column({
     type: DataType.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   })
-  id: number;
+  id!: CreationOptional<number>;
 
   @ForeignKey(() => Team)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
   })
-  team_id: number;
+  team_id!: number;
 
   @Column({
     type: DataType.STRING(255),
     allowNull: false,
   })
-  name: string;
+  name!: string;
 
   @Column({
     type: DataType.TEXT,
     allowNull: true,
   })
-  description: string;
+  description?: string;
 
   @BelongsTo(() => Team)
-  team: Team;
+  team?: Team;
 
   @HasMany(() => Feature)
-  features: Feature[];
+  features?: Feature[];
 }

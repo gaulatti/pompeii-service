@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { passportJwtSecret } from 'jwks-rsa';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { UsersService } from './users/users.service';
 
 /**
  * Constructs the JWKS URI for a given AWS Cognito region and user pool ID.
@@ -52,7 +53,10 @@ export class AuthorizationStrategy extends PassportStrategy(Strategy) {
    *
    * The JWKS URI and issuer URL are built using the AWS region and Cognito user pool ID from the configuration service.
    */
-  constructor(configService: ConfigService) {
+  constructor(
+    configService: ConfigService,
+    private readonly usersService: UsersService,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKeyProvider: passportJwtSecret({
@@ -73,12 +77,12 @@ export class AuthorizationStrategy extends PassportStrategy(Strategy) {
   }
 
   /**
-   * Validates the given payload.
+   * Validates the provided payload and updates the user information.
    *
-   * @param payload - The payload to validate.
-   * @returns The validated payload.
+   * @param payload - The data payload containing user information to be validated and updated.
+   * @returns A promise that resolves with the updated user information.
    */
-  validate(payload: any) {
-    return payload as object;
+  async validate(payload: any) {
+    return await this.usersService.updateUser(payload);
   }
 }
