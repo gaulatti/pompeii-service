@@ -12,6 +12,7 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
+import { PermissionLevel } from 'src/utils/enums';
 import { Application } from './application.model';
 import { Permission } from './permission.model';
 
@@ -56,6 +57,12 @@ export class Feature extends Model<
     allowNull: true,
   })
   description?: string;
+
+  @Column({
+    type: DataType.ENUM(...Object.values(PermissionLevel)),
+    allowNull: true,
+  })
+  default_value?: PermissionLevel;
 
   @BelongsTo(() => Application)
   application?: Application;

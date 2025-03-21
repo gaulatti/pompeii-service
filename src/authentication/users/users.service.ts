@@ -4,6 +4,7 @@ import { AccessLog } from 'src/models/access.log.model';
 import { Login } from 'src/models/login.model';
 import { Membership } from 'src/models/membership.model';
 import { User } from 'src/models/user.model';
+import { nanoid } from 'src/utils/nanoid';
 
 @Injectable()
 export class UsersService {
@@ -80,7 +81,12 @@ export class UsersService {
           sub,
         });
       } else {
-        user = await this.user.create({ name, last_name: family_name, email });
+        user = await this.user.create({
+          name,
+          last_name: family_name,
+          email,
+          slug: nanoid(),
+        });
         await this.login.create({
           user_id: user.id,
           provider: provider || 'unknown',

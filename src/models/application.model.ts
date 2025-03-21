@@ -45,6 +45,13 @@ export class Application extends Model<
   name!: string;
 
   @Column({
+    type: DataType.STRING(255),
+    allowNull: false,
+    unique: true,
+  })
+  slug!: string;
+
+  @Column({
     type: DataType.TEXT,
     allowNull: true,
   })

@@ -11,15 +11,9 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
+import { PermissionLevel } from 'src/utils/enums';
 import { Feature } from './feature.model';
 import { Membership } from './membership.model';
-
-export enum PermissionLevel {
-  C = 'C',
-  T1 = 'T1',
-  T2 = 'T2',
-  T3 = 'T3',
-}
 
 @Table({
   tableName: 'permissions',

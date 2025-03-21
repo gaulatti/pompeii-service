@@ -30,6 +30,13 @@ export class Team extends Model<
   })
   name!: string;
 
+  @Column({
+    type: DataType.STRING(255),
+    allowNull: false,
+    unique: true,
+  })
+  slug!: string;
+
   @HasMany(() => Membership)
   memberships?: Membership[];
 

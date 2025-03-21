@@ -29,7 +29,7 @@ const buildJwksUri = (region: string, poolId: string) =>
  *
  * @example
  * // Example usage:
- * const strategy = new AuthorizationStrategy(configService);
+ * const strategy = new AuthenticationStrategy(configService);
  *
  * @method constructor
  * @param {ConfigService} configService - The configuration service used to retrieve necessary configuration values.
@@ -39,9 +39,9 @@ const buildJwksUri = (region: string, poolId: string) =>
  * @returns {any} The updated user information.
  */
 @Injectable()
-export class AuthorizationStrategy extends PassportStrategy(Strategy) {
+export class AuthenticationStrategy extends PassportStrategy(Strategy) {
   /**
-   * Constructs an instance of the authorization strategy.
+   * Constructs an instance of the authentication strategy.
    *
    * @param {ConfigService} configService - The configuration service to retrieve environment variables.
    *

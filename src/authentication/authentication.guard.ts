@@ -4,7 +4,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { IS_PUBLIC_KEY } from 'src/decorators/public.decorator';
 
 /**
- * AuthorizationGuard is a custom guard that extends the default JWT AuthGuard.
+ * AuthenticationGuard is a custom guard that extends the default JWT AuthGuard.
  * It determines whether the current request is authorized to proceed based on the presence of an authorization token
  * or whether the route is marked as public.
  *
@@ -14,7 +14,7 @@ import { IS_PUBLIC_KEY } from 'src/decorators/public.decorator';
  * @param {Reflector} reflector - An instance of the Reflector class used to access metadata.
  *
  * @method canActivate
- * @memberof AuthorizationGuard
+ * @memberof AuthenticationGuard
  * @param {ExecutionContext} context - The execution context which provides details about the current request.
  * @returns {boolean} - A boolean indicating whether the request is authorized.
  *
@@ -23,7 +23,7 @@ import { IS_PUBLIC_KEY } from 'src/decorators/public.decorator';
  * 2. If no authorization token is present, it checks if the route is marked as public. If the route is public, access is granted; otherwise, access is denied.
  */
 @Injectable()
-export class AuthorizationGuard extends AuthGuard('jwt') {
+export class AuthenticationGuard extends AuthGuard('jwt') {
   constructor(private readonly reflector: Reflector) {
     super();
   }

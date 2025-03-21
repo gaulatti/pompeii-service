@@ -35,6 +35,13 @@ export class User extends Model<
   @Column({
     type: DataType.STRING(255),
     allowNull: false,
+    unique: true,
+  })
+  slug!: string;
+
+  @Column({
+    type: DataType.STRING(255),
+    allowNull: false,
   })
   name!: string;
 

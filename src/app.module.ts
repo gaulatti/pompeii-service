@@ -10,6 +10,7 @@ import { SequelizeModule, SequelizeModuleOptions } from '@nestjs/sequelize';
 import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthenticationModule } from './authentication/authentication.module';
 import { AuthorizationModule } from './authorization/authorization.module';
 import { CloudWatchService } from './core/cloudwatch/cloudwatch.service';
 import { CoreModule } from './core/core.module';
@@ -87,6 +88,7 @@ const secretsManager = new SecretsManagerClient();
     CoreModule,
     DalModule,
     AuthorizationModule,
+    AuthenticationModule,
   ],
   controllers: [AppController],
   providers: [
