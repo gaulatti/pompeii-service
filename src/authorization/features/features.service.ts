@@ -20,19 +20,19 @@ export class FeaturesService {
   private readonly logger!: JSONLogger;
 
   /**
-   * Retrieves a list of features associated with a specific application.
+   * Retrieves a list of features associated with a specific application
+   * identified by its slug.
    *
-   * @param request - An object containing the slug of the application for which features are being requested.
-   * @returns A promise that resolves to an array of objects, each representing a feature with its name, slug, and default value.
-   *          If the application does not exist, an empty array is returned.
+   * @param request - An object containing the slug of the application for which
+   *                  features are being requested.
+   * @returns A promise that resolves to an array of features. If the application
+   *          does not exist, an empty array is returned.
    *
-   * @remarks
-   * - Logs an error if the requested application does not exist.
-   * - The `default_value` of a feature defaults to 'C' if it is not explicitly set.
+   * @throws Logs an error if the application with the specified slug does not exist.
    */
   async getFeaturesByApplication(
     request: GetFeaturesByApplicationRequest,
-  ): Promise<{ name: string; slug: string; default_value: string }[]> {
+  ): Promise<Feature[]> {
     const application = await this.applicationsService.getBySlug(request.slug);
 
     if (!application) {
@@ -42,15 +42,8 @@ export class FeaturesService {
       return [];
     }
 
-    const features = await this.feature.findAll({
+    return this.feature.findAll({
       where: { application_id: application.id },
-      attributes: ['name', 'slug', 'default_value'],
     });
-
-    return features.map((feature) => ({
-      name: feature.name,
-      slug: feature.slug,
-      default_value: feature.default_value,
-    }));
   }
 }

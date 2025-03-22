@@ -4,9 +4,9 @@ import { UsersService } from 'src/authentication/users/users.service';
 import {
   GetFeaturesByApplicationRequest,
   GetFeaturesByApplicationResponse,
-  UserIdentity,
-  UserContext,
   User,
+  UserContext,
+  UserIdentity,
 } from '../types/pompeii';
 import { FeaturesService } from './features/features.service';
 
@@ -53,9 +53,39 @@ export class AuthorizationController {
    */
   @GrpcMethod('PompeiiService', 'Login')
   async login(data: UserIdentity): Promise<UserContext> {
+    /**
+     * Get the Features for the current app.
+     */
+    const defaultFeatures = await this.featuresService.getFeaturesByApplication(
+      {
+        slug: data.key,
+      },
+    );
+
+    /**
+     * Get the current user, and if required, create or update it.
+     */
     const me = await this.usersService.updateUser(data);
-    const features = await this.featuresService.getFeaturesByApplication({
-      slug: data.key,
+
+    /**
+     * TODO: Update this to have different permission sets per team, even if it's the same user.
+     */
+    const userPermissions =
+      me.memberships?.flatMap((item) => item.permissions) || [];
+
+    /**
+     * Override default permissions with membership-level treatments where applicable.
+     */
+    const features = defaultFeatures.map((item) => {
+      const override = userPermissions.find(
+        (permission) => permission?.feature_id === item.id,
+      )?.level;
+
+      if (override) {
+        item.default_value = override;
+      }
+
+      return item;
     });
 
     const kickoff: UserContext = {

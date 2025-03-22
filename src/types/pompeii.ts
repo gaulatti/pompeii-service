@@ -37,13 +37,6 @@ export type UserIdentity = {
   key: string;
 };
 
-export type Permission = {
-  id: number;
-  feature_id: number;
-  membership_id: number;
-  level?: 'C' | 'T1' | 'T2' | 'T3';
-};
-
 export type Team = {
   id: number;
   name: string;
@@ -56,7 +49,6 @@ export type Membership = {
   users_id: number;
   teams_id: number;
   role: number;
-  permissions?: Permission[];
   team?: Team;
 };
 

@@ -46,13 +46,6 @@ message UserIdentity {
   string key = 19;
 }
 
-message Permission {
-  int32 id = 1;
-  int32 feature_id = 2;
-  int32 membership_id = 3;
-  string level = 4;
-}
-
 message Team {
   int32 id = 1;
   string name = 2;
@@ -64,7 +57,6 @@ message Membership {
   int32 users_id = 2;
   int32 teams_id = 3;
   int32 role = 4;
-  repeated Permission permissions = 5;
   Team team = 6;
 }
 
