@@ -15,7 +15,7 @@ export type Identity = {
   primary: string;
 };
 
-export type LoginRequest = {
+export type UserIdentity = {
   at_hash: string;
   sub: string;
   cognito_groups: string[];
@@ -63,7 +63,7 @@ export type Feature = {
   default_value: string;
 };
 
-export type LoginResponse = {
+export type UserContext = {
   me: User;
   features: Feature[];
 };

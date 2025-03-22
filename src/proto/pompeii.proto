@@ -4,7 +4,7 @@ package pompeii;
 
 service PompeiiService {
   rpc GetFeaturesByApplication (GetFeaturesByApplicationRequest) returns (GetFeaturesByApplicationResponse);
-  rpc Login (LoginRequest) returns (LoginResponse);
+  rpc Login (UserIdentity) returns (UserContext);
 }
 
 message GetFeaturesByApplicationRequest {
@@ -24,7 +24,7 @@ message Identity {
   string primary = 6;
 }
 
-message LoginRequest {
+message UserIdentity {
   string at_hash = 1;
   string sub = 2;
   repeated string cognito_groups = 3;
@@ -72,7 +72,7 @@ message Feature {
   string default_value = 3;
 }
 
-message LoginResponse {
+message UserContext {
   User me = 1;
   repeated Feature features = 2;
 }

@@ -4,8 +4,8 @@ import { UsersService } from 'src/authentication/users/users.service';
 import {
   GetFeaturesByApplicationRequest,
   GetFeaturesByApplicationResponse,
-  LoginRequest,
-  LoginResponse,
+  UserIdentity,
+  UserContext,
   User,
 } from '../types/pompeii';
 import { FeaturesService } from './features/features.service';
@@ -48,17 +48,17 @@ export class AuthorizationController {
    * the features associated with the specified application key.
    *
    * @param data - The login request data containing user credentials and application key.
-   * @returns A promise that resolves to a `LoginResponse` object containing the updated user information
+   * @returns A promise that resolves to a `UserContext` object containing the updated user information
    *          and the features available for the specified application.
    */
   @GrpcMethod('PompeiiService', 'Login')
-  async login(data: LoginRequest): Promise<LoginResponse> {
+  async login(data: UserIdentity): Promise<UserContext> {
     const me = await this.usersService.updateUser(data);
     const features = await this.featuresService.getFeaturesByApplication({
       slug: data.key,
     });
 
-    const kickoff: LoginResponse = {
+    const kickoff: UserContext = {
       me: me as unknown as User,
       features,
     };
