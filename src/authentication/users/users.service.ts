@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/sequelize';
 import { AccessLog } from 'src/models/access.log.model';
 import { Login } from 'src/models/login.model';
 import { Membership } from 'src/models/membership.model';
+import { Permission } from 'src/models/permission.model';
+import { Team } from 'src/models/team.model';
 import { User } from 'src/models/user.model';
 import { nanoid } from 'src/utils/nanoid';
 
@@ -73,28 +75,36 @@ export class UsersService {
     let user = await this.getUser(sub);
 
     if (!user) {
+      /**
+       * If User is not found by the current provider, try to find it by mail.
+       */
       user = await this.user.findOne({ where: { email } });
-      if (user) {
-        await this.login.create({
-          user_id: user.id,
-          provider: provider || 'unknown',
-          sub,
-        });
-      } else {
+
+      if (!user) {
+        /**
+         * If there's no user at all, create it.
+         */
         user = await this.user.create({
           name,
           last_name: family_name,
           email,
           slug: nanoid(),
         });
-        await this.login.create({
-          user_id: user.id,
-          provider: provider || 'unknown',
-          sub,
-        });
       }
+
+      /**
+       * Attach the provider to the account.
+       */
+      await this.login.create({
+        user_id: user.id,
+        provider: provider || 'unknown',
+        sub,
+      });
     }
 
+    /**
+     * Update its details if they're not present.
+     */
     let updatedUser = user;
     if (!user.name || !user.last_name || !user.email) {
       updatedUser = await user.update({
@@ -104,9 +114,24 @@ export class UsersService {
       });
     }
 
+    /**
+     * Create an access log.
+     */
     await this.accessLog.create({
       user_id: updatedUser.id,
       timestamp: new Date(),
+    });
+
+    /**
+     * Reload the user for delivery purposes.
+     */
+    await updatedUser.reload({
+      include: [
+        {
+          model: Membership,
+          include: [{ model: Permission }, { model: Team }],
+        },
+      ],
     });
 
     return updatedUser;

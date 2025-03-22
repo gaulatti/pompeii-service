@@ -37,12 +37,27 @@ export type UserIdentity = {
   key: string;
 };
 
-export type Login = {
+export type Permission = {
   id: number;
-  user_id: number;
-  provider: string;
-  sub: string;
-  created_at: string;
+  feature_id: number;
+  membership_id: number;
+  level?: 'C' | 'T1' | 'T2' | 'T3';
+};
+
+export type Team = {
+  id: number;
+  name: string;
+  slug: string;
+  memberships?: Membership[];
+};
+
+export type Membership = {
+  id: number;
+  users_id: number;
+  teams_id: number;
+  role: number;
+  permissions?: Permission[];
+  team?: Team;
 };
 
 export type User = {
@@ -54,7 +69,7 @@ export type User = {
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
-  logins: Login[];
+  memberships?: Membership[];
 };
 
 export type Feature = {
