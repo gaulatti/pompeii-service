@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Logger } from 'src/decorators/logger.decorator';
 import { Feature } from 'src/models/feature.model';
+import { GetFeaturesByApplicationRequest } from 'src/types/pompeii';
 import { JSONLogger } from 'src/utils/logger';
 import { ApplicationsService } from '../applications/applications.service';
-import { GetFeaturesByApplicationRequest } from '../authorization.controller';
 
 @Injectable()
 export class FeaturesService {
