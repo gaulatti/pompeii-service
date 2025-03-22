@@ -48,6 +48,9 @@ async function bootstrap(): Promise<void> {
       package: 'pompeii',
       protoPath: join(__dirname, './proto/pompeii.proto'),
       url: `0.0.0.0:${grpcPort}`,
+      loader: {
+        keepCase: true,
+      },
     },
   });
   await app.startAllMicroservices();

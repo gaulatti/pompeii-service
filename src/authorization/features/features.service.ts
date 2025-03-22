@@ -50,7 +50,7 @@ export class FeaturesService {
     return features.map((feature) => ({
       name: feature.name,
       slug: feature.slug,
-      default_value: feature.default_value ?? 'C',
+      default_value: feature.default_value,
     }));
   }
 }

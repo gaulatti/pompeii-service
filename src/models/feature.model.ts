@@ -60,9 +60,9 @@ export class Feature extends Model<
 
   @Column({
     type: DataType.ENUM(...Object.values(PermissionLevel)),
-    allowNull: true,
+    allowNull: false,
   })
-  default_value?: PermissionLevel;
+  default_value: PermissionLevel;
 
   @BelongsTo(() => Application)
   application?: Application;
